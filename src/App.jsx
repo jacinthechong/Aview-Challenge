@@ -1,14 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import "./App.css";
 
 function App() {
   const [currentJoke, setCurrentJoke] = useState("");
   const [currentLanguage, setCurrentLanguage] = useState("en");
+  const [languages, setLanguages] = useState([]);
+
+  useEffect(() => {
+    getLanguages();
+  }, []);
+
+  const getLanguages = async () => {
+    const response = await axios.get("http://localhost:8000/languages");
+    setLanguages(response.data);
+  };
 
   const getJoke = async () => {
     const response = await axios.get(
-      "https://v2.jokeapi.dev/joke/any?blacklistFlags=nsfw"
+      "https://v2.jokeapi.dev/joke/Any?blacklistFlags=nsfw,racist,sexist,explicit"
     );
     let text;
     if (!response.data.joke) {
@@ -33,6 +43,14 @@ function App() {
     setCurrentJoke(response.data.translatedText);
   };
 
+  let languageOptions = languages.map((element) => {
+    return (
+      <option key={element.code} value={element.code}>
+        {element.name}
+      </option>
+    );
+  });
+
   return (
     <>
       <label htmlFor="language-select">Choose a language</label>
@@ -41,10 +59,7 @@ function App() {
         defaultValue="en"
         onChange={(e) => setCurrentLanguage(e.target.value)}
       >
-        <option value="en">English</option>
-        <option value="fr">French</option>
-        <option value="es">Spanish</option>
-        <option value="ja">Japanese</option>
+        {languageOptions}
       </select>
       <button onClick={getJoke}>Get New Joke</button>
       <div>{currentJoke}</div>
