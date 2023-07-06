@@ -15,8 +15,8 @@ const LanguageSelector = ({ setLanguage, languages, currentLanguage }) => {
   }
 
   return (
-    <>
-      <label htmlFor="language-select">Choose a language</label>
+    <div className="language-selector">
+      <label htmlFor="language-select">Choose a language: </label>
       <select
         id="language-select"
         value={currentLanguage}
@@ -24,7 +24,7 @@ const LanguageSelector = ({ setLanguage, languages, currentLanguage }) => {
       >
         {languageOptions}
       </select>
-    </>
+    </div>
   );
 };
 

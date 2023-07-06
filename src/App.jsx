@@ -1,10 +1,11 @@
 import Joke from "./Components/Joke";
+import Title from "./Components/Title";
 import ErrorBoundary from "./Components/ErrorBoundary";
-import "./App.css";
 
 function App() {
   return (
     <ErrorBoundary>
+      <Title />
       <Joke />
     </ErrorBoundary>
   );

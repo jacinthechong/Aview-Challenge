@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import LanguageSelector from "./LanguageSelector";
+import Loader from "./Loader";
 import { TRANSLATE_API_ENDPOINT, JOKES_API_ENDPOINT } from "../../constants";
 
 const Joke = () => {
@@ -8,6 +9,7 @@ const Joke = () => {
   const [languages, setLanguages] = useState([]);
   const [currentLanguage, setCurrentLanguage] = useState("en");
   const [errorText, setErrorText] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     getLanguages();
@@ -28,6 +30,12 @@ const Joke = () => {
   //Set the current language selected in the LanguageSelector component
   const setLanguage = (languageInput) => {
     setCurrentLanguage(languageInput);
+  };
+
+  const resetStates = () => {
+    setErrorText("");
+    setCurrentJoke("");
+    setIsLoading(true);
   };
 
   //Fetch one joke from the Joke API (currently safe-mode on to filter out nsfw jokes)
@@ -66,10 +74,14 @@ const Joke = () => {
 
   //Combine fetchJoke and translateText to get a new joke and also translate to desired language
   const getJoke = async () => {
+    resetStates();
     const jokeData = await fetchJoke();
     let text;
     if (jokeData.error) {
       text = jokeData.error;
+      setErrorText(text);
+      setIsLoading(false);
+      return;
     } else if (!jokeData.joke) {
       text = `${jokeData.setup} ${jokeData.delivery}`;
     } else {
@@ -84,6 +96,7 @@ const Joke = () => {
     } else {
       setCurrentJoke(translatedJoke);
     }
+    setIsLoading(false);
   };
 
   return (
@@ -94,7 +107,8 @@ const Joke = () => {
         currentLanguage={currentLanguage}
       />
       <button onClick={getJoke}>Get New Joke</button>
-      <h1>{errorText}</h1>
+      {isLoading && <Loader />}
+      <h2>{errorText}</h2>
       <h2>{currentJoke}</h2>
     </>
   );
