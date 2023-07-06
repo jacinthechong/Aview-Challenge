@@ -7,14 +7,15 @@ const Joke = () => {
   const [currentJoke, setCurrentJoke] = useState("");
   const [languages, setLanguages] = useState([]);
   const [currentLanguage, setCurrentLanguage] = useState("en");
+  const [errorText, setErrorText] = useState("");
 
   useEffect(() => {
     getLanguages();
   }, []);
 
-  /* Using multiple functions to make API calls to allow separation of concerns */
+  //Using multiple functions to make API calls to allow separation of concerns
 
-  /* This function will fetch all the available languages from LibreTranslate */
+  //Fetch all the available languages from LibreTranslate API
   const getLanguages = async () => {
     try {
       const response = await axios.get(`${TRANSLATE_API_ENDPOINT}/languages`);
@@ -24,22 +25,23 @@ const Joke = () => {
     }
   };
 
-  /* This function will set the current language selected in the LanguageSelector component */
+  //Set the current language selected in the LanguageSelector component
   const setLanguage = (languageInput) => {
     setCurrentLanguage(languageInput);
   };
 
-  /* This function will fetch one joke from the Joke API (currently safe-mode on to filter out nsfw jokes)*/
+  //Fetch one joke from the Joke API (currently safe-mode on to filter out nsfw jokes)
   const fetchJoke = async () => {
     try {
       const response = await axios.get(`${JOKES_API_ENDPOINT}/Any?safe-mode`);
       return response.data;
     } catch (error) {
       console.error("Failed to fetch joke:", error);
+      return { error: "Oops! Something went wrong..." };
     }
   };
 
-  /* This function will post the selected language and text to the LibreTranslate API */
+  //Post the selected language and text to the LibreTranslate API
   const translateText = async (language, text) => {
     try {
       const formData = {
@@ -51,23 +53,37 @@ const Joke = () => {
         `${TRANSLATE_API_ENDPOINT}/translate`,
         formData
       );
+      setErrorText("");
       return response.data.translatedText;
     } catch (error) {
-      console.error("Failed to fetch and translate joke:", error);
+      console.error("Failed to translate joke:", error);
+      return {
+        error: "Oops! We can't seem to translate your joke...",
+        original: text,
+      };
     }
   };
 
-  /* This function will combine fetchJoke and translateText to get a new joke and also translate to desired language */
+  //Combine fetchJoke and translateText to get a new joke and also translate to desired language
   const getJoke = async () => {
     const jokeData = await fetchJoke();
     let text;
-    if (!jokeData.joke) {
+    if (jokeData.error) {
+      text = jokeData.error;
+    } else if (!jokeData.joke) {
       text = `${jokeData.setup} ${jokeData.delivery}`;
     } else {
       text = jokeData.joke;
     }
     const translatedJoke = await translateText(currentLanguage, text);
-    setCurrentJoke(translatedJoke);
+
+    //If there is an error with translation, will render the original joke in the default language
+    if (translatedJoke.error) {
+      setErrorText(`${translatedJoke.error} Here's the original:`);
+      setCurrentJoke(translatedJoke.original);
+    } else {
+      setCurrentJoke(translatedJoke);
+    }
   };
 
   return (
@@ -78,7 +94,8 @@ const Joke = () => {
         currentLanguage={currentLanguage}
       />
       <button onClick={getJoke}>Get New Joke</button>
-      <h1>{currentJoke}</h1>
+      <h1>{errorText}</h1>
+      <h2>{currentJoke}</h2>
     </>
   );
 };
