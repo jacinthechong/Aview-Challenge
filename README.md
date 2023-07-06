@@ -1,39 +1,52 @@
-# Aview-Challenge
+# WittyWorld: The Multilingual Joke Vault
 
-Coding Challenge for Aview International
+A random joke generator that can be translated into different languages.
 
-Objective: Create a web application that integrates with a free public API to display content, then translate that content into a chosen language.
+## Getting Started
 
-Background: At Aview International, we work with content from all over the world. Therefore, it's critical that we can understand and translate content into different languages effectively. In this challenge, you will demonstrate your skills in API integration, frontend development, and your understanding of translation services.
+This guide will help you get started with the app and start exploring its features.
 
-Task: Your task is to create a simple web application. This application should accomplish the following:
+### Prerequisites
 
-API Integration: To fetch and display content, use a public API like The Dog API (https://thedogapi.com/) or the JokeAPI (https://jokeapi.dev/). You should fetch content from these APIs and display it on your application.
+Before you begin, you'll need to make sure you have the following installed:
 
-Translation: Add a feature that allows the user to translate the fetched content into a different language. You can use any free translation API like LibreTranslate API (https://libretranslate.com/docs).
+- Node.js
+- Docker (if using Docker to download LibreTranslate image)
 
-User Interface: The web application should have a user-friendly interface. The content fetched from the API should be displayed clearly, and the user should be able to easily select a language for translation.
+### Installation
 
-Evaluation Criteria:
-Proper functioning of the application - The app should fetch and display content and translate it correctly.
+To install and run the app, follow these steps:
 
-Code quality - Your code should be clean, well-organized, and easy to understand. Proper comments and documentation are also essential.
+1. Run `npm install` to install all dependencies.
+2. Follow the instructions on [LibreTranslate's Repository](https://github.com/LibreTranslate/LibreTranslate) to host a local version of the translation API. For this project, port 8000 was used, and it can be changed in `constants.js`.
+3. Run `npm run build` to build the application.
+4. Run `npm run preview` to preview the project.
 
-Error handling - Your application should handle potential errors gracefully.
+## Approach and Design Decisions
 
-User Interface Design - The application should be easy to use and visually appealing.
+### Architecture
 
-Submission:
-Submit your code within 72 hours as a zip file or a link to a public GitHub repository and a live working demo. Please include a README file that:
+- Used Vite for quick setup of frontend development environment.
+- Utilized React for functional component architecture, allowing for component reuse.
 
-Explains how to install and run your application
+### Error Handling
 
-Describes your approach to the challenge and any design decisions you made
+- Implemented try-catch blocks for API calls.
+- Error notifications are displayed to the user in addition to being logged to the console.
+- Separate error messages provided depending on whether Joke API or Translation API is causing the error.
+- Translation API error will still display joke to user in the original language.
+- Overarching error boundary wrapping App.jsx to handle any other possible errors not already handled.
 
-Contains any other information you think might be helpful or relevant.
+### UI/UX Design
 
-Submit the final documents here: https://442vrfyf012.typeform.com/rd1submission
+- Styled the application with clean and visually appealing colors that match Aview International's website design.
+- Included animated Loader component to inform user that request is in progress.
 
-Note: The focus of this challenge is to evaluate your technical skills and creativity. We encourage you to use free and open-source tools and libraries and to leverage your existing knowledge and experience. Good luck!
+## Additional Information
 
-Please ensure you respect the terms of service of any APIs or services you use. Your application should not store any personal data or sensitive information.
+This project relies on the following external APIs:
+
+- [Jokes API](https://jokesapi.dev/): Provides the random jokes used in the generator.
+- [LibreTranslate API](https://libretranslate.com/): Powers the translation functionality of the application.
+
+For further details or inquiries, please refer to the project repository or contact the project maintainers.

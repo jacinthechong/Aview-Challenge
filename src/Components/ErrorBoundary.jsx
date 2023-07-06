@@ -1,5 +1,7 @@
 import React from "react";
 
+//Error Boundary for overall error handling
+
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
