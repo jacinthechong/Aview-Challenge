@@ -2,6 +2,8 @@
 
 A random joke generator that can be translated into different languages.
 
+https://github.com/jacinthechong/Aview-Challenge/assets/106402982/d58960c9-4d45-4104-8041-bcbe85433080
+
 ## Getting Started
 
 This guide will help you get started with the app and start exploring its features.
@@ -36,6 +38,14 @@ To install and run the app, follow these steps:
 - Separate error messages provided depending on whether Joke API or Translation API is causing the error.
 - Translation API error will still display joke to user in the original language.
 - Overarching error boundary wrapping App.jsx to handle any other possible errors not already handled.
+
+#### Error from Joke API
+![Screenshot 2023-07-06 at 12 15 35 AM](https://github.com/jacinthechong/Aview-Challenge/assets/106402982/d894625f-8d1e-4c44-a19f-b78a7aa88779)
+
+#### Error from LibreTranslate API
+![Screenshot 2023-07-06 at 12 16 03 AM](https://github.com/jacinthechong/Aview-Challenge/assets/106402982/a344c1c7-b988-4db4-9578-bc5854d879ed)
+
+
 
 ### UI/UX Design
 
